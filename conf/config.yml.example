@@ -1,0 +1,7 @@
+---
+dbHost: localhost 
+dbName: koha
+dbUser: kohauser
+dbPass: kohapass
+kohaOpacUrl: http://www.example.org/cgi-bin/koha
+coverBgUrl: http://www.example.org/koha-static/recent-home/cover_bg.png 

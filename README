@@ -1,0 +1,19 @@
+Version: 0.1
+
+Description: 
+Script generates web page or html table containing recently acquired titles from your Koha database. 
+It fetches last X records and shows randomly Y of X .. hope you understand :D. 
+It will work only if you use acquisition module in Koha!
+
+Installation:
+As you already got the files, just rename ./conf/config.yml.example to ./conf/config.yml and edit this file according to your setup
+
+Usage:
+koha-recent [number_of_retrived_records] [number_shown] [table|html] [blank|parent|self]
+
+
+Example:
+# cd /usr/local/src/Koha-recently-acquired-books && koha-recent.pl 10 3 html blank > /var/www/koha-static/recent.html 
+
+Hint:
+Cron is your friend.
