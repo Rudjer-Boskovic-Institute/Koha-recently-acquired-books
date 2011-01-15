@@ -4,8 +4,6 @@ use strict;
 use DBI();
 use Business::ISBN;
 use YAML::XS;
-use Data::Dumper;
-use File::Basename;
 
 my $config = do{local(@ARGV,$/)="conf/config.yml";<>};
 my $conf = Load $config;
