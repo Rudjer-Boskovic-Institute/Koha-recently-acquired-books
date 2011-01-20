@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 
 use strict;
-use DBI();
+use C4::Context;
+use CGI;
 use Business::ISBN;
 use YAML::XS;
 
@@ -13,32 +14,25 @@ my $sqlNumShow = $ARGV[1];
 my $layout = $ARGV[2];
 my $target = $ARGV[3];
 
-my $dbh = DBI->connect("DBI:mysql:database=$conf->{'dbName'};host=$conf->{'dbHost'}",
-                       $conf->{'dbUser'}, $conf->{'dbPass'},
-                       {'RaiseError' => 1});
+my $dbh = C4::Context->dbh();
 
 my $isbn;
 my $isbn10;
 my $amazonImg;
 
-my $sqlQuery = "select * from (select aqorders.biblionumber as bnum, biblio.title, biblio.author, biblioitems.isbn from aqorders,biblio,biblioitems where biblioitems.biblionumber=aqorders.biblionumber and biblio.biblionumber=aqorders.biblionumber order by datereceived desc limit 25) as recent order by rand() limit " . $sqlNumShow . ";";
+my $sqlQuery = "SELECT * FROM (SELECT aqorders.biblionumber AS bnum, biblio.title, biblio.author, biblioitems.isbn FROM aqorders,biblio,biblioitems WHERE biblioitems.biblionumber=aqorders.biblionumber AND biblio.biblionumber=aqorders.biblionumber ORDER BY datereceived DESC LIMIT 25) AS recent ORDER BY rand() LIMIT " . $sqlNumShow . ";";
 
 my $uni = $dbh->prepare("set names utf8;");
 my $sth = $dbh->prepare($sqlQuery);
 $uni->execute();
 $sth->execute();
 
-
+my $query;
 if ($layout eq 'html') {
-print <<HEADER;
-<html>
-  <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  </head>
-<body>
-HEADER
+    $query = new CGI;
+    print $query->header(-charset=>'utf-8');
+    print $query->start_html(-encoding=>'utf-8');
 }
-
 print <<CSS;
 <style type="text/css">
 td { font-family: Arial, Verdana; font-size: 12px; }
@@ -73,10 +67,7 @@ MAIN
 print "\n\t\t</tr>\n\t</table>\n";
 
 if ($layout eq 'html') {
-print <<FOOTER;
-</body>
-</html>
-FOOTER
+    print $query->end_html;
 }
 
 $sth->finish();
