@@ -48,7 +48,7 @@ CSS
 print "\t<table width=\"100%\">\n\t\t<tr>\n\t\t\t";
 
 while (my $ref = $sth->fetchrow_hashref()) {
-  if (defined($ref->{'isbn'})) {
+  if (defined($ref->{'isbn'}) && (length($ref->{'isbn'}) == 13 || length($ref->{'isbn'}) == 10)) {
     $isbn = Business::ISBN->new($ref->{'isbn'});
     $isbn = $isbn->as_isbn10;
     $isbn10 = $isbn->isbn;
